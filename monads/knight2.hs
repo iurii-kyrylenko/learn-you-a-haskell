@@ -13,8 +13,7 @@ isPosValid (KnightPos (x, y) _)
 
 moveKnight :: KnightPos -> [KnightPos]
 moveKnight Empty = []
-moveKnight (KnightPos(x, y) h) = do
-  let h1 = KnightPos(x, y) h
+moveKnight h1@(KnightPos(x, y) h) = do
   p <- [ KnightPos (x - 1, y + 2) h1
        , KnightPos (x + 1, y + 2) h1
        , KnightPos (x + 2, y + 1) h1
