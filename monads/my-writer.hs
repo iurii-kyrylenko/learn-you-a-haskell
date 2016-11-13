@@ -33,4 +33,4 @@ t2 = runWriter $
   \x -> logNumber (x + 1) >>
   logNumber (777)
 
-t3 = runWriter $ (+) <$> logNumber 42 <*> logNumber 43 >>= \x -> logNumber (2 * x)
+t3 = runWriter $ (+) <$> logNumber 42 <*> logNumber 43 >>= (logNumber . (2*)) >>= (logNumber . negate)

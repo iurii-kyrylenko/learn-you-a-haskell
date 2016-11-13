@@ -1,22 +1,3 @@
---
--- OLD VERSION
---
--- see also: http://stackoverflow.com/questions/32929252/can-ghc-derive-functor-and-applicative-instances-for-a-monad-transformer
---
--- newtype MyWriter w a = MyWriter { runWriter :: (a, w) }
-
--- instance (Monoid w) => Monad (MyWriter w) where
---   return x = MyWriter (x, mempty)
---   (MyWriter (x, v)) >>= f =
---     let (MyWriter (y, v1)) = f x
---     in  MyWriter (y, v `mappend` v1)
-
---
--- NEW VERSION
---
--- http://stackoverflow.com/questions/11684321/how-to-play-with-control-monad-writer-in-haskell
---
-
 import Control.Monad.Writer
 
 t1 = runWriter (return 3 :: Writer String Int)
