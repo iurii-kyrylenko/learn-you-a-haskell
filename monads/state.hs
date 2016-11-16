@@ -1,4 +1,5 @@
 import System.Random
+import Control.Monad.State
 
 threeCoins :: StdGen -> (Bool, Bool, Bool)
 threeCoins gen =
@@ -18,3 +19,17 @@ push x xs = ((), x:xs)
 pop :: Stack -> (Int, Stack)
 pop (x:xs) = (x, xs)
 
+----------
+
+getRandom :: State StdGen Bool
+getRandom = state random
+
+process = do
+  r1 <- getRandom
+  r2 <- getRandom
+  r3 <- getRandom
+  return (r1, r2, r3)
+
+threeCoins' seed = fst $ runState process $ mkStdGen seed
+
+s2 = threeCoins' 1

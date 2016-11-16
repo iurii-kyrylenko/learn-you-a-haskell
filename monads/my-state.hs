@@ -23,10 +23,13 @@ r4 = processStack' ((), [1..5]) 42
 instance Monad (MyState s) where
   return x = MyState (\s -> (x, s))
   -- (>>=) :: MyState a -> (a -> MyState b) -> MyState b
-  MyState x >>= g = MyState (\s ->
-    let (a, newState) = x s
-        MyState f = g a
-    in f newState)
+  -- MyState x >>= g = MyState (\s ->
+  --   let (a, newState) = x s
+  --       MyState f = g a
+  --   in f newState)
+  m >>= g = MyState (\s ->
+    let (a, newState) = runState m s
+    in  runState (g a) newState)
 
 instance Applicative (MyState s) where
   pure = return
@@ -47,3 +50,39 @@ process = do
 t1 = runState process []
 t2 = runState (push 42 >>= \_ -> push 43 >>= \_ -> pop >>= \a -> push 44 >>= \_ -> push a >>= \_ -> push 45 >> return a) [] 
 
+get = MyState $ \s -> (s, s)
+put a = MyState $ \s -> ((), a)
+
+process2 = do
+  push 42
+  push 43
+  a <- pop
+  push 44
+  mark <- get
+  push a
+  push 45
+  return mark
+
+t3 = runState process2 []
+
+t4 = runState (
+       push 42 >>= \
+  _ -> push 43 >>= \
+  _ -> pop >>= \
+  a -> push 44 >>= \
+  _ -> get >>= \
+  m -> push a >>= \
+  _ -> push 45 >>
+       return m
+  ) []
+
+pop' = do
+  (x:xs) <- get
+  put xs
+  return x
+
+push' x = do
+  xs <- get
+  put (x:xs)
+
+t5 = runState (push 42 >>= \_ -> push 43 >>= \_ -> pop >>= \a -> push 44 >>= \_ -> push a >>= \_ -> push 45 >> return a) []
