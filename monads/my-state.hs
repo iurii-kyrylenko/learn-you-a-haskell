@@ -44,8 +44,6 @@ process = do
   push 45
   return a
 
-test = runState process []
-
-t1 = runState (push 42 >>= \_ -> pop >>= \a -> push 44 >> return a) []
+t1 = runState process []
 t2 = runState (push 42 >>= \_ -> push 43 >>= \_ -> pop >>= \a -> push 44 >>= \_ -> push a >>= \_ -> push 45 >> return a) [] 
 
