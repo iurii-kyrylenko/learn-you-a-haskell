@@ -29,3 +29,13 @@ moveKnight3Times p = return p >>= moveKnight >>= moveKnight >>= moveKnight
 
 isTargetAccessibleIn3Moves :: KnightPos -> KnightPos -> Bool
 isTargetAccessibleIn3Moves s t = t `elem` (moveKnight3Times s)
+
+moveKnightFn :: Int -> KnightPos -> [KnightPos]
+moveKnightFn n = foldl (<=<) return $ replicate n moveKnight
+-- moveKnightFn n = foldl (<=<) (return . id) $ replicate n moveKnight
+
+moveKnightEx :: Int -> KnightPos -> [KnightPos]
+moveKnightEx p = return p >>= moveKnightFn
+
+isTargetAccessibleEx :: Int -> KnightPos -> KnightPos -> Bool
+isTargetAccessibleEx n s t = t `elem` moveKnightEx n s
