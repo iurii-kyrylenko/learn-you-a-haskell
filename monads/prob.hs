@@ -57,6 +57,7 @@ instance Monad Prob where
 
   -- Can't add (Eq b) to the context of the type signature for:
   -- (>>=) :: Prob a -> (a -> Prob b) -> Prob b
+  -- http://www.randomhacks.net.s3-website-us-east-1.amazonaws.com/2007/03/15/data-set-monad-haskell-macros/
 
   -- (>>=) m f = joinProbWithGroup $ fmap f m
 
